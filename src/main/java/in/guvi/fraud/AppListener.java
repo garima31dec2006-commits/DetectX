@@ -1,0 +1,3 @@
+package in.guvi.fraud;
+import in.guvi.fraud.db.Database;import in.guvi.fraud.dao.TransactionDao;import in.guvi.fraud.service.*;import jakarta.servlet.*;import jakarta.servlet.annotation.WebListener;
+@WebListener public class AppListener implements ServletContextListener{public void contextInitialized(ServletContextEvent e){Database.initialize();TransactionDao d=new TransactionDao();MlFraudModel m=new MlFraudModel();try{m.train();}catch(Exception x){throw new IllegalStateException("ML model training failed",x);}e.getServletContext().setAttribute("dao",d);e.getServletContext().setAttribute("model",m);e.getServletContext().setAttribute("detector",new DetectionService(d,m));}}
